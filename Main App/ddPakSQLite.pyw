@@ -45,6 +45,7 @@ class Login (QtGui.QDialog) :
             query.next()
             
             if (str(query.value(0).toString()) == password) and query.isValid() :
+                role = query.value(1).toString()
                 if caller == 'login' :
                     ddpak.ui.label_19.setText(str(query.value(2).toString()))
                     query.clear() 
@@ -777,8 +778,8 @@ class DDPak(QtGui.QMainWindow) :
     
     def editPref(self) :
         
-        login_in.show()
-        if self.validateUser('edit')  == 'admin':
+        log_in.show()
+        if log_in.validateUser('edit')  == 'admin':
             self.change_preferences.loadConfig()
             self.change_preferences.show()
             log_in.hide()
@@ -787,8 +788,8 @@ class DDPak(QtGui.QMainWindow) :
     
     def editKitTable(self):
         
-        login_in.show()
-        if self.validateUser('edit') == 'admin' :
+        log_in.show()
+        if log_in.validateUser('edit') == 'admin' :
             self.edit_kit_table.setupDatabaseViews()
             self.edit_kit_table.show()
             log_in.hide()
@@ -937,7 +938,7 @@ class DDPak(QtGui.QMainWindow) :
     def editUsers(self):
         
         log_in.show()
-        if self.validateAdmin('edit')  == 'admin' :
+        if log_in.validateUser('edit')  == 'admin' :
             self.edit_user.setupDatabaseViews(db)
             self.edit_user.show()
             log_in.hide()
