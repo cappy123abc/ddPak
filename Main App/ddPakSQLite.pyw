@@ -8,6 +8,7 @@ import datetime
 import subprocess
 import serial
 import shutil
+import hashlib
 import QtPoppler
 from serial.tools.list_ports import *
 from PyQt4 import QtGui, QtCore, QtSql, QtXml
@@ -35,27 +36,27 @@ class Login (QtGui.QDialog) :
         self.connect(self.ui.pushButton, QtCore.SIGNAL('clicked()'),self.validateUser )
         self.connect(self.ui.pushButton_2, QtCore.SIGNAL('clicked()'),self, QtCore.SLOT('close()'))
         
-    def validateUser(self,  caller = 'login'):
+    def validateUser(self):
 
         if db.open() :
-            username = self.ui.lineEdit.text()
-            password = self.ui.lineEdit_2.text()
-            query = QtSql.QSqlQuery(db)
-            query.exec_(''' Select passwd, role, initials from users where user_id = '%s'   ''' % username)      
-            query.next()
             
-            if (str(query.value(0).toString()) == password) and query.isValid() :
-                role = query.value(1).toString()
-                if caller == 'login' :
-                    ddpak.ui.label_19.setText(str(query.value(2).toString()))
-                    query.clear() 
-                    ddpak.weighStart()
-                    self.hide()
-                elif caller == 'edit' :
-                    return role
+            if self.ui.label.Text == 'Password' :
+                password = self.ui.lineEdit.text()
+                stored_password = config.get('general','admin_password')
+                if password == stored_password : return True
+                else : return False
+            else :
+                username = self.ui.lineEdit.text()
+                query = QtSql.QSqlQuery(db)
+                query.exec_(''' Select initials from users where user_id = '%s'   ''' % username)      
+                query.next()
                 
-            else:
-                self.ui.label_3.setText('Bad username or password!')
+                if  query.isValid() :
+                    ddpak.ui.label_19.setText(str(query.value(0).toString()))
+                    self.hide()
+      
+                else:
+                    self.ui.label_3.setText("User doesn't exist.")
 
         
         else :
@@ -137,11 +138,11 @@ class ChangePrefs (QtGui.QDialog):
         
         """ Read and display config settings """
     
-        self.config = ConfigParser.ConfigParser()
+
         # need following line so that app can find config file with a relative path 
         #self.ini_file = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "ddPak.ini") blah
         
-        self.config.read(config_path)
+
         available_ports = serial.tools.list_ports.comports()
         for port in available_ports :
             self.ui.comboBox_9.addItem(port[0])
@@ -156,50 +157,50 @@ class ChangePrefs (QtGui.QDialog):
         self.ui.comboBox_2.addItems(('Odd', 'Even', 'None'))
         self.ui.comboBox_3.addItems(('Odd', 'Even', 'None'))
         self.ui.comboBox_11.addItems(('Zebra 105SL', 'Zebra LP2844'))
-        self.ui.comboBox_9.setCurrentIndex(self.ui.comboBox_9.findText(self.config.get('printerport','portnumber')))
-        self.ui.comboBox_10.setCurrentIndex(self.ui.comboBox_10.findText(self.config.get('scaleport','portnumber')))
-        self.ui.comboBox.setCurrentIndex(self.ui.comboBox.findText(self.config.get('printerport','baud')))
-        self.ui.comboBox_4.setCurrentIndex(self.ui.comboBox_4.findText(self.config.get('scaleport','baud')))
-        self.ui.comboBox_5.setCurrentIndex(self.ui.comboBox_5.findText(self.config.get('printerport','databits')))
-        self.ui.comboBox_6.setCurrentIndex(self.ui.comboBox_6.findText(self.config.get('scaleport','databits')))
-        self.ui.comboBox_7.setCurrentIndex(self.ui.comboBox_7.findText(self.config.get('printerport','stopbit')))
-        self.ui.comboBox_8.setCurrentIndex(self.ui.comboBox_8.findText(self.config.get('scaleport','stopbit')))
-        self.ui.comboBox_2.setCurrentIndex(self.ui.comboBox_2.findText(self.config.get('printerport','parity')))
-        self.ui.comboBox_3.setCurrentIndex(self.ui.comboBox_3.findText(self.config.get('scaleport','parity')))
-        self.ui.checkBox.setCheckState(self.config.getint('general','cameramode'))
-        self.ui.lineEdit.setText(self.config.get('general','dbbackuppath'))
-        self.ui.lineEdit_2.setText(self.config.get('general','mountsmesdb'))
+        self.ui.comboBox_9.setCurrentIndex(self.ui.comboBox_9.findText(config.get('printerport','portnumber')))
+        self.ui.comboBox_10.setCurrentIndex(self.ui.comboBox_10.findText(config.get('scaleport','portnumber')))
+        self.ui.comboBox.setCurrentIndex(self.ui.comboBox.findText(config.get('printerport','baud')))
+        self.ui.comboBox_4.setCurrentIndex(self.ui.comboBox_4.findText(config.get('scaleport','baud')))
+        self.ui.comboBox_5.setCurrentIndex(self.ui.comboBox_5.findText(config.get('printerport','databits')))
+        self.ui.comboBox_6.setCurrentIndex(self.ui.comboBox_6.findText(config.get('scaleport','databits')))
+        self.ui.comboBox_7.setCurrentIndex(self.ui.comboBox_7.findText(config.get('printerport','stopbit')))
+        self.ui.comboBox_8.setCurrentIndex(self.ui.comboBox_8.findText(config.get('scaleport','stopbit')))
+        self.ui.comboBox_2.setCurrentIndex(self.ui.comboBox_2.findText(config.get('printerport','parity')))
+        self.ui.comboBox_3.setCurrentIndex(self.ui.comboBox_3.findText(config.get('scaleport','parity')))
+        self.ui.checkBox.setCheckState(config.getint('general','cameramode'))
+        self.ui.lineEdit.setText(config.get('general','dbbackuppath'))
+        self.ui.lineEdit_2.setText(config.get('general','mountsmesdb'))
 
-        if self.config.getboolean('general', 'highvolume') :  self.ui.checkBox_2.setCheckState(2)
-        if self.config.getboolean('general', 'lowvolume') :  self.ui.checkBox_3.setCheckState(2)
-        if self.config.getboolean('general', 'supercell') :  self.ui.checkBox_4.setCheckState(2)
+        if config.getboolean('general', 'highvolume') :  self.ui.checkBox_2.setCheckState(2)
+        if config.getboolean('general', 'lowvolume') :  self.ui.checkBox_3.setCheckState(2)
+        if config.getboolean('general', 'supercell') :  self.ui.checkBox_4.setCheckState(2)
 
 
     def updatePreferences(self) :
         
         """ Write new preferences to config file and restart weighing operation"""
         
-        self.config.set('printerport', 'portnumber', self.ui.comboBox_9.currentText())
-        self.config.set('scaleport','portnumber', self.ui.comboBox_10.currentText())
-        self.config.set('printerport','baud', self.ui.comboBox.currentText())
-        self.config.set('scaleport','baud', self.ui.comboBox_4.currentText())
-        self.config.set('printerport','databits', self.ui.comboBox_5.currentText())
-        self.config.set('scaleport','databits', self.ui.comboBox_6.currentText())
-        self.config.set('printerport','stopbit', self.ui.comboBox_7.currentText())
-        self.config.set('scaleport','stopbit', self.ui.comboBox_8.currentText())
-        self.config.set('printerport','parity', self.ui.comboBox_2.currentText())
-        self.config.set('scaleport','parity', self.ui.comboBox_3.currentText())
-        self.config.set('general','cameramode', self.ui.checkBox.checkState())
-        self.config.set('general','dbbackuppath', self.ui.lineEdit.text())
-        self.config.set('general','mountsmesdb', self.ui.lineEdit_2.text())
-        if self.ui.checkBox_2.isChecked() :  self.config.set('general','highvolume', 1)
-        else : self.config.set('general','highvolume', 0)
-        if self.ui.checkBox_3.isChecked() :  self.config.set('general','lowvolume', 1)
-        else : self.config.set('general','lowvolume', 0)
-        if self.ui.checkBox_4.isChecked() :  self.config.set('general','supercell', 1)
-        else : self.config.set('general','supercell', 0)
+        config.set('printerport', 'portnumber', self.ui.comboBox_9.currentText())
+        config.set('scaleport','portnumber', self.ui.comboBox_10.currentText())
+        config.set('printerport','baud', self.ui.comboBox.currentText())
+        config.set('scaleport','baud', self.ui.comboBox_4.currentText())
+        config.set('printerport','databits', self.ui.comboBox_5.currentText())
+        config.set('scaleport','databits', self.ui.comboBox_6.currentText())
+        config.set('printerport','stopbit', self.ui.comboBox_7.currentText())
+        config.set('scaleport','stopbit', self.ui.comboBox_8.currentText())
+        config.set('printerport','parity', self.ui.comboBox_2.currentText())
+        config.set('scaleport','parity', self.ui.comboBox_3.currentText())
+        config.set('general','cameramode', self.ui.checkBox.checkState())
+        config.set('general','dbbackuppath', self.ui.lineEdit.text())
+        config.set('general','mountsmesdb', self.ui.lineEdit_2.text())
+        if self.ui.checkBox_2.isChecked() :  config.set('general','highvolume', 1)
+        else : config.set('general','highvolume', 0)
+        if self.ui.checkBox_3.isChecked() :  config.set('general','lowvolume', 1)
+        else : config.set('general','lowvolume', 0)
+        if self.ui.checkBox_4.isChecked() :  config.set('general','supercell', 1)
+        else : config.set('general','supercell', 0)
 
-        self.config.write(open(config_path, 'wb'))
+        config.write(open(config_path, 'wb'))
         ddpak.weighStart()
         
         
@@ -382,9 +383,9 @@ class DDPak(QtGui.QMainWindow) :
     
         #Create serial port objects, timer, etc. todo --- add exception handling when opening serial ports.
         
-        self.config = ConfigParser.ConfigParser()
-        #self.config.read(os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "ddPak.ini")) blah
-        self.config.read(config_path)
+
+
+        config.read(config_path)
         self.timer = QtCore.QTimer()
         self.serial_no = ''
         self.host_name = socket.gethostname()
@@ -436,7 +437,7 @@ class DDPak(QtGui.QMainWindow) :
         # Set up the MountsMES database connection
         
         self.MESdb = QtSql.QSqlDatabase.addDatabase("QODBC", "mountsMES_db")
-        self.MESdb_file = self.config.get("general", "mountsmesdb")
+        self.MESdb_file = config.get("general", "mountsmesdb")
         self.MESdb.setDatabaseName("Driver={Microsoft Access Driver (*.mdb)};FIL={MS Access};DBQ=%s"  % self.MESdb_file )
         
 
@@ -453,13 +454,12 @@ class DDPak(QtGui.QMainWindow) :
         
         """This function starts or restarts the weighing based on preferences"""
         
-        #self.config.read(os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "ddPak.ini")) blah
-        self.config.read(config_path)
-        self.camera_mode = self.config.getint('general','cameramode')
+        config.read(config_path)
+        self.camera_mode = config.getint('general','cameramode')
         self.production_reportingd_line_viz = ''
-        if self.config.getboolean('general','highvolume')  : self.production_reportingd_line_viz += '3,'
-        if self.config.getboolean('general','lowvolume')  : self.production_reportingd_line_viz += '1,'
-        if self.config.getboolean('general','supercell')  : self.production_reportingd_line_viz += '2,' 
+        if config.getboolean('general','highvolume')  : self.production_reportingd_line_viz += '3,'
+        if config.getboolean('general','lowvolume')  : self.production_reportingd_line_viz += '1,'
+        if config.getboolean('general','supercell')  : self.production_reportingd_line_viz += '2,' 
         self.production_reportingd_line_viz = self.production_reportingd_line_viz.rstrip( ',')
         self.setupCarriersView()
         self.setupLabelsPrintedView()
@@ -467,11 +467,11 @@ class DDPak(QtGui.QMainWindow) :
         
         try:
             
-            self.printerport.port = self.config.get('printerport','portnumber')
-            self.printerport.baudrate = self.config.getint('printerport','baud')
-            self.printerport.bytesize = self.config.getint('printerport','databits')
-            self.printerport.stopbits = self.config.getfloat('printerport','stopbit')
-            self.printerport.parity = self.config.get('printerport','parity')[:1]
+            self.printerport.port = config.get('printerport','portnumber')
+            self.printerport.baudrate = config.getint('printerport','baud')
+            self.printerport.bytesize = config.getint('printerport','databits')
+            self.printerport.stopbits = config.getfloat('printerport','stopbit')
+            self.printerport.parity = config.get('printerport','parity')[:1]
             if not(self.printerport.isOpen()) : self.printerport.open()
             
         except:
@@ -480,11 +480,11 @@ class DDPak(QtGui.QMainWindow) :
             
         try:
             
-            self.scaleport.port = self.config.get('scaleport','portnumber')
-            self.scaleport.baudrate = self.config.getint('scaleport','baud')
-            self.scaleport.bytesize = self.config.getint('scaleport','databits')
-            self.scaleport.stopbits = self.config.getfloat('scaleport','stopbit')
-            self.scaleport.parity = self.config.get('scaleport','parity')[:1]
+            self.scaleport.port = config.get('scaleport','portnumber')
+            self.scaleport.baudrate = config.getint('scaleport','baud')
+            self.scaleport.bytesize = config.getint('scaleport','databits')
+            self.scaleport.stopbits = config.getfloat('scaleport','stopbit')
+            self.scaleport.parity = config.get('scaleport','parity')[:1]
             if not(self.scaleport.isOpen()) : self.scaleport.open()
             
         except :
@@ -499,7 +499,7 @@ class DDPak(QtGui.QMainWindow) :
     def backupDatabase (self) :
         """ Todo - write over old db file"""
         
-        self.db_backup_dir = self.config.get('general','dbbackuppath')
+        self.db_backup_dir = config.get('general','dbbackuppath')
         try: shutil.copy(db_file , self.db_backup_dir + '/' + self.host_name + '_' + datetime.datetime.today().strftime("%m_%d_%Y") + '.sqlite' )
         except Exception as inst : self.ui.plainTextEdit.appendPlainText('Database file not backed up! %s' % inst)
         
@@ -778,22 +778,24 @@ class DDPak(QtGui.QMainWindow) :
     
     def editPref(self) :
         
+        log_in.label.setText('Password')
         log_in.show()
-        if log_in.validateUser('edit')  == 'admin':
+        if log_in.validateUser() :
             self.change_preferences.loadConfig()
             self.change_preferences.show()
             log_in.hide()
-        else : log_in.label_3.setText('Only admin can edit settings')
+        else : log_in.label_3.setText('Incorrect password')
     
     
     def editKitTable(self):
         
+        log_in.label.setText('Password')
         log_in.show()
-        if log_in.validateUser('edit') == 'admin' :
+        if log_in.validateUser() :
             self.edit_kit_table.setupDatabaseViews()
             self.edit_kit_table.show()
             log_in.hide()
-        else :  log_in.label_3.setText('Only admin can edit kit table')
+        else :  log_in.label_3.setText('Incorrect password.')
         
     
     def setTare(self) :
@@ -839,7 +841,7 @@ class DDPak(QtGui.QMainWindow) :
             row = index.row()
             kit = str(self.modelpq.data(self.modelpq.index(row, 0)).toString())
             carrier = self.modelpq.data(self.modelpq.index(row, 7)).toInt()[0]
-            specdoc_path = self.config.get('general','specpath')
+            specdoc_path = config.get('general','specpath')
             
             query = QtSql.QSqlQuery()
             sqlstring = ("""Select description, scale_weight, weight_tolerance, box, label_text, pdf
@@ -881,7 +883,7 @@ class DDPak(QtGui.QMainWindow) :
             
             #Move selected kit to completed queue in either MountsMES or the internal SQLite database depending on preferences
             
-            if self.config.getboolean('general','carrierviewmode')  :
+            if config.getboolean('general','carrierviewmode')  :
                 query = QtSql.QSqlQuery(self.MESdb)
                 old_queue = 94
                 old_position = self.modelpq.data(self.modelpq.index(row, 1)).toInt()[0]
@@ -937,12 +939,13 @@ class DDPak(QtGui.QMainWindow) :
         
     def editUsers(self):
         
+        log_in.label.setText('Password')
         log_in.show()
-        if log_in.validateUser('edit')  == 'admin' :
+        if log_in.validateUser() :
             self.edit_user.setupDatabaseViews(db)
             self.edit_user.show()
             log_in.hide()
-        else: log_in.label_3.setText('Only admin can edit user table')
+        else: log_in.label_3.setText('Incorrect password.')
         
 
        
@@ -967,7 +970,7 @@ class DDPak(QtGui.QMainWindow) :
 app = QtGui.QApplication(sys.argv)
 config_name = 'ddPak.ini'
 
-# Determine whether application is running as a script or as a frozen exe (pyinstaller generated)
+# Determine whether application is running as a script or as a frozen exe.
 
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable)
@@ -975,7 +978,8 @@ elif __file__ :
     application_path = os.path.dirname(__file__)
     
 config_path = os.path.join(application_path, config_name)
-    
+config = ConfigParser.ConfigParser()
+config.read(config_path)  
 # Set up the default database connection,  (database file must be in same directory as application)
 db = QtSql.QSqlDatabase.addDatabase("QSQLITE")
 db_file = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "mounts.sqlite")
