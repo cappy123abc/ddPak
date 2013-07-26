@@ -26,7 +26,7 @@ class Login (QtGui.QDialog) :
     def __init__ (self) :
         
         QtGui.QDialog.__init__(self)
-        self.setAttribute(QtCore.Qt.WA_DeleteOnClose, on=True)
+#         self.setAttribute(QtCore.Qt.WA_DeleteOnClose, on=True)
     
         # Set up the user interface from Designer.
         self.ui = Ui_loginDialog()
@@ -41,10 +41,13 @@ class Login (QtGui.QDialog) :
 
         if db.open() :
             if self.ui.label.text() == 'Password' :
+                self.ui.lineEdit.setEchoMode(2)
                 password = self.ui.lineEdit.text()
                 stored_password = config.get('general','admin_password')
                 if password == stored_password : self.accept()
-                else : self.validated = False
+                else :
+                    self.ui.lineEdit.clear()  
+                    self.ui.label_3.setText('Incorrect password.')
             else :
                 username = self.ui.lineEdit.text()
                 query = QtSql.QSqlQuery(db)
@@ -790,11 +793,12 @@ class DDPak(QtGui.QMainWindow) :
     def editKitTable(self):
         
         log_in.ui.label.setText('Password')
+        log_in.ui.lineEdit.clear()
         if log_in.exec_() == QtGui.QDialog.Accepted :
             self.edit_kit_table.setupDatabaseViews()
             self.edit_kit_table.show()
-            log_in.hide()
-        else :  log_in.ui.label_3.setText('Incorrect password.')
+
+        
         
     
     def setTare(self) :
@@ -986,7 +990,7 @@ db.setDatabaseName(db_file)
 log_in = Login()      
 ddpak = DDPak()
 ddpak.showMaximized()
-log_in.validateUser() 
+log_in.exec_() 
 app.exec_()
 
 
