@@ -856,7 +856,7 @@ class DDPak(QtGui.QMainWindow) :
             self.weight_tol = query.value(2).toFloat()
             box = str(query.value(3).toString())
             labelformat = str(query.value(4).toString())
-            blah = str(query.value(5).toString())
+            
             self.specdoc_file = specdoc_path + '/' + str(query.value(5).toString()) 
             self.printerport.write(labelformat)
             self.ui.label_12.setText(kit)
