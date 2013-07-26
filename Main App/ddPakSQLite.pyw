@@ -36,15 +36,16 @@ class Login (QtGui.QDialog) :
         self.connect(self.ui.pushButton, QtCore.SIGNAL('clicked()'),self.validateUser )
         self.connect(self.ui.pushButton_2, QtCore.SIGNAL('clicked()'),self, QtCore.SLOT('close()'))
         
+        self.validated = False
+        
     def validateUser(self):
 
         if db.open() :
-            
-            if self.ui.label.Text == 'Password' :
+            if self.ui.label.text() == 'Password' :
                 password = self.ui.lineEdit.text()
                 stored_password = config.get('general','admin_password')
-                if password == stored_password : return True
-                else : return False
+                if password == stored_password : self.validated =  True
+                else : self.validated = False
             else :
                 username = self.ui.lineEdit.text()
                 query = QtSql.QSqlQuery(db)
@@ -778,24 +779,24 @@ class DDPak(QtGui.QMainWindow) :
     
     def editPref(self) :
         
-        log_in.label.setText('Password')
+        log_in.ui.label.setText('Password')
         log_in.show()
         if log_in.validateUser() :
             self.change_preferences.loadConfig()
             self.change_preferences.show()
             log_in.hide()
-        else : log_in.label_3.setText('Incorrect password')
+        else : log_in.ui.label_3.setText('Incorrect password')
     
     
     def editKitTable(self):
         
-        log_in.label.setText('Password')
+        log_in.ui.label.setText('Password')
         log_in.show()
-        if log_in.validateUser() :
+        if log_in.validated :
             self.edit_kit_table.setupDatabaseViews()
             self.edit_kit_table.show()
             log_in.hide()
-        else :  log_in.label_3.setText('Incorrect password.')
+        else :  log_in.ui.label_3.setText('Incorrect password.')
         
     
     def setTare(self) :
@@ -939,13 +940,13 @@ class DDPak(QtGui.QMainWindow) :
         
     def editUsers(self):
         
-        log_in.label.setText('Password')
+        log_in.ui.label.setText('Password')
         log_in.show()
         if log_in.validateUser() :
             self.edit_user.setupDatabaseViews(db)
             self.edit_user.show()
             log_in.hide()
-        else: log_in.label_3.setText('Incorrect password.')
+        else: log_in.ui.label_3.setText('Incorrect password.')
         
 
        
