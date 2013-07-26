@@ -36,15 +36,14 @@ class Login (QtGui.QDialog) :
         self.connect(self.ui.pushButton, QtCore.SIGNAL('clicked()'),self.validateUser )
         self.connect(self.ui.pushButton_2, QtCore.SIGNAL('clicked()'),self, QtCore.SLOT('close()'))
         
-        self.validated = False
-        
     def validateUser(self):
+        
 
         if db.open() :
             if self.ui.label.text() == 'Password' :
                 password = self.ui.lineEdit.text()
                 stored_password = config.get('general','admin_password')
-                if password == stored_password : self.validated =  True
+                if password == stored_password : self.accept()
                 else : self.validated = False
             else :
                 username = self.ui.lineEdit.text()
@@ -54,7 +53,7 @@ class Login (QtGui.QDialog) :
                 
                 if  query.isValid() :
                     ddpak.ui.label_19.setText(str(query.value(0).toString()))
-                    self.hide()
+                    self.accept()
       
                 else:
                     self.ui.label_3.setText("User doesn't exist.")
@@ -791,8 +790,7 @@ class DDPak(QtGui.QMainWindow) :
     def editKitTable(self):
         
         log_in.ui.label.setText('Password')
-        log_in.show()
-        if log_in.validated :
+        if log_in.exec_() == QtGui.QDialog.Accepted :
             self.edit_kit_table.setupDatabaseViews()
             self.edit_kit_table.show()
             log_in.hide()
@@ -988,7 +986,7 @@ db.setDatabaseName(db_file)
 log_in = Login()      
 ddpak = DDPak()
 ddpak.showMaximized()
-log_in.show() 
+log_in.validateUser() 
 app.exec_()
 
 
