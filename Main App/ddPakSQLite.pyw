@@ -44,7 +44,9 @@ class Login (QtGui.QDialog) :
                 self.ui.lineEdit.setEchoMode(2)
                 password = self.ui.lineEdit.text()
                 stored_password = config.get('general','admin_password')
-                if password == stored_password : self.accept()
+                if password == stored_password :
+                    self.ui.label_3.clear()
+                    self.accept()
                 else :
                     self.ui.lineEdit.clear()  
                     self.ui.label_3.setText('Incorrect password.')
@@ -782,12 +784,11 @@ class DDPak(QtGui.QMainWindow) :
     def editPref(self) :
         
         log_in.ui.label.setText('Password')
-        log_in.show()
-        if log_in.validateUser() :
+        log_in.ui.lineEdit.clear()
+        if log_in.exec_() == QtGui.QDialog.Accepted :
             self.change_preferences.loadConfig()
             self.change_preferences.show()
-            log_in.hide()
-        else : log_in.ui.label_3.setText('Incorrect password')
+
     
     
     def editKitTable(self):
@@ -944,14 +945,14 @@ class DDPak(QtGui.QMainWindow) :
         self.ui.tableView_2.edit(index)
         
     def editUsers(self):
-        
+               
         log_in.ui.label.setText('Password')
         log_in.show()
-        if log_in.validateUser() :
+        if log_in.exec_() == QtGui.QDialog.Accepted :
             self.edit_user.setupDatabaseViews(db)
             self.edit_user.show()
-            log_in.hide()
-        else: log_in.ui.label_3.setText('Incorrect password.')
+        
+
         
 
        
