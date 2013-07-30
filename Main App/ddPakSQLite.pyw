@@ -9,6 +9,7 @@ import subprocess
 import serial
 import shutil
 import hashlib
+import fnmatch
 import QtPoppler
 from serial.tools.list_ports import *
 from PyQt4 import QtGui, QtCore, QtSql, QtXml
@@ -26,8 +27,7 @@ class Login (QtGui.QDialog) :
     def __init__ (self) :
         
         QtGui.QDialog.__init__(self)
-#         self.setAttribute(QtCore.Qt.WA_DeleteOnClose, on=True)
-    
+
         # Set up the user interface from Designer.
         self.ui = Ui_loginDialog()
         self.ui.setupUi(self)
@@ -500,10 +500,10 @@ class DDPak(QtGui.QMainWindow) :
         return
         
     def backupDatabase (self) :
-        """ Todo - write over old db file"""
+        """ Backs up database when ddpak is started."""
         
         self.db_backup_dir = config.get('general','dbbackuppath')
-        try: shutil.copy(db_file , self.db_backup_dir + '/' + self.host_name + '_' + datetime.datetime.today().strftime("%m_%d_%Y") + '.sqlite' )
+        try: shutil.copy(db_file , self.db_backup_dir + '/' + self.host_name  + '.sqlite' )
         except Exception as inst : self.ui.plainTextEdit.appendPlainText('Database file not backed up! %s' % inst)
         
             
@@ -860,7 +860,7 @@ class DDPak(QtGui.QMainWindow) :
             box = str(query.value(3).toString())
             labelformat = str(query.value(4).toString())
             
-            self.specdoc_file = specdoc_path + '/' + str(query.value(5).toString()) 
+             
             self.printerport.write(labelformat)
             self.ui.label_12.setText(kit)
             self.ui.label_13.setText(desc)
@@ -870,6 +870,9 @@ class DDPak(QtGui.QMainWindow) :
 
             # Load up spec document
             
+#             self.specdoc_file = specdoc_path + '/' + str(query.value(5).toString())
+            specfiles = os.listdir(specdoc_path)
+            self.specdoc_file = fnmatch.filter(specfiles,str(query.value(5).toString()) + '*')[0]
             try:
                 self.specdoc = QtPoppler.Poppler.Document.load(self.specdoc_file)
                 self.specdoc.setRenderHint(QtPoppler.Poppler.Document.Antialiasing)
