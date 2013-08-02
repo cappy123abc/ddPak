@@ -40,6 +40,7 @@ class Login (QtGui.QDialog) :
         
 
         if db.open() :
+
             if self.ui.label.text() == 'Password' :
                 self.ui.lineEdit.setEchoMode(2)
                 password = self.ui.lineEdit.text()
@@ -58,6 +59,7 @@ class Login (QtGui.QDialog) :
                 
                 if  query.isValid() :
                     ddpak.ui.label_19.setText(str(query.value(0).toString()))
+                    ddpak.weighStart()
                     self.accept()
       
                 else:
@@ -872,7 +874,7 @@ class DDPak(QtGui.QMainWindow) :
             # Load up spec document
             
             specfiles = os.listdir(specdoc_path)
-            self.specdoc_file = fnmatch.filter(specfiles,str(query.value(5).toString()) + '*')[0]
+            self.specdoc_file = specdoc_path + fnmatch.filter(specfiles,str(query.value(5).toString()) + '*')[0]
             try:
                 self.specdoc = QtPoppler.Poppler.Document.load(self.specdoc_file)
                 self.specdoc.setRenderHint(QtPoppler.Poppler.Document.Antialiasing)
