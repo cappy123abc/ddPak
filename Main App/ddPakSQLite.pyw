@@ -871,7 +871,6 @@ class DDPak(QtGui.QMainWindow) :
 
             # Load up spec document
             
-#             self.specdoc_file = specdoc_path + '/' + str(query.value(5).toString())
             specfiles = os.listdir(specdoc_path)
             self.specdoc_file = fnmatch.filter(specfiles,str(query.value(5).toString()) + '*')[0]
             try:
@@ -879,15 +878,16 @@ class DDPak(QtGui.QMainWindow) :
                 self.specdoc.setRenderHint(QtPoppler.Poppler.Document.Antialiasing)
                 self.specdoc.setRenderHint(QtPoppler.Poppler.Document.TextAntialiasing) 
                 self.navPdf("first")
-                self.ui.plainTextEdit.setPlainText('Place empty %s box on scale and push Tare button' % box)
-                packdate = datetime.datetime.now().strftime("%m-%d-%y")
+
                 
             except:
 
                 self.ui.plainTextEdit.setPlainText("Couldn't find specification document")
                 
 
-            
+            self.ui.plainTextEdit.setPlainText('Place empty %s box on scale and push Tare button' % box)
+            packdate = datetime.datetime.now().strftime("%m-%d-%y")
+                
             #Move selected kit to completed queue in either MountsMES or the internal SQLite database depending on preferences
             
             if config.getboolean('general','carrierviewmode')  :
