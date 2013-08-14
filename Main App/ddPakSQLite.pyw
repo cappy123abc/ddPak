@@ -949,7 +949,7 @@ class DDPak(QtGui.QMainWindow) :
     def editUsers(self):
                
         log_in.ui.label.setText('Password')
-        log_in.show()
+        log_in.ui.lineEdit.clear()
         if log_in.exec_() == QtGui.QDialog.Accepted :
             self.edit_user.setupDatabaseViews(db)
             self.edit_user.show()
@@ -991,7 +991,7 @@ config = ConfigParser.ConfigParser()
 config.read(config_path)  
 # Set up the default database connection,  (database file must be in same directory as application)
 db = QtSql.QSqlDatabase.addDatabase("QSQLITE")
-db_file = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "mounts.sqlite")
+db_file = os.path.join(application_path, 'mounts.sqlite')
 db.setDatabaseName(db_file)
 log_in = Login()      
 ddpak = DDPak()
