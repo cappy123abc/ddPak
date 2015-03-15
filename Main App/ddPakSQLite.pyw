@@ -10,7 +10,7 @@ import serial
 import shutil
 import hashlib
 import fnmatch
-import QtPoppler
+import popplerqt4
 from serial.tools.list_ports import *
 from PyQt4 import QtGui, QtCore, QtSql, QtXml
 from ScannerInterface import Ui_MainWindow
@@ -876,7 +876,7 @@ class DDPak(QtGui.QMainWindow) :
             specfiles = os.listdir(specdoc_path)
             self.specdoc_file = specdoc_path + fnmatch.filter(specfiles,str(query.value(5).toString()) + '*')[0]
             try:
-                self.specdoc = QtPoppler.Poppler.Document.load(self.specdoc_file)
+                self.specdoc = popplerqt4.Poppler.Document.load(self.specdoc_file)
                 self.specdoc.setRenderHint(QtPoppler.Poppler.Document.Antialiasing)
                 self.specdoc.setRenderHint(QtPoppler.Poppler.Document.TextAntialiasing) 
                 self.navPdf("first")
