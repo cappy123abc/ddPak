@@ -1,0 +1,1 @@
+All files in this directory were created with Qt designer. Only edit the files with Qt designer and them compile them with pyrcc.

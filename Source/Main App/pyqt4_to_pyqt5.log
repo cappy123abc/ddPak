@@ -1,0 +1,66 @@
+**  pyqt4_to_pyqt5.log  Saturday 16. September 2017 10:29  **
+Args: ['../../../pyqt4topyqt5/pyqt4topyqt5.py', 'about.py', '-o', 'about']
+
+Processing file: `C:\Users\Caleb\Development\ddPak\Source\Main App\about.py`
+  No changes needed.
+
+**  pyqt4_to_pyqt5.log  Saturday 16. September 2017 10:30  **
+Args: ['../../../pyqt4topyqt5/pyqt4topyqt5.py', 'EditKitTable.py', '-o', 'EditKitTable']
+
+Processing file: `C:\Users\Caleb\Development\ddPak\Source\Main App\EditKitTable.py`
+  No changes needed.
+
+**  pyqt4_to_pyqt5.log  Saturday 16. September 2017 10:30  **
+Args: ['../../../pyqt4topyqt5/pyqt4topyqt5.py', 'EditUsers.py', '-o', 'EditUsers']
+
+Processing file: `C:\Users\Caleb\Development\ddPak\Source\Main App\EditUsers.py`
+  No changes needed.
+
+**  pyqt4_to_pyqt5.log  Saturday 16. September 2017 10:31  **
+Args: ['../../../pyqt4topyqt5/pyqt4topyqt5.py', 'login.py', '-o', 'login']
+
+Processing file: `C:\Users\Caleb\Development\ddPak\Source\Main App\login.py`
+  No changes needed.
+
+**  pyqt4_to_pyqt5.log  Saturday 16. September 2017 10:31  **
+Args: ['../../../pyqt4topyqt5/pyqt4topyqt5.py', 'myrc_rc.py', '-o', 'myrc_rc']
+
+Processing file: `C:\Users\Caleb\Development\ddPak\Source\Main App\myrc_rc.py`
+  No changes needed.
+
+**  pyqt4_to_pyqt5.log  Saturday 16. September 2017 10:32  **
+Args: ['../../../pyqt4topyqt5/pyqt4topyqt5.py', 'PrefsNew.py', '-o', 'PrefsNew']
+
+Processing file: `C:\Users\Caleb\Development\ddPak\Source\Main App\PrefsNew.py`
+  No changes needed.
+
+**  pyqt4_to_pyqt5.log  Saturday 16. September 2017 10:32  **
+Args: ['../../../pyqt4topyqt5/pyqt4topyqt5.py', 'ProductionReporting.py', '-o', 'ProductionReporting']
+
+Processing file: `C:\Users\Caleb\Development\ddPak\Source\Main App\ProductionReporting.py`
+  No changes needed.
+
+**  pyqt4_to_pyqt5.log  Saturday 16. September 2017 10:33  **
+Args: ['../../../pyqt4topyqt5/pyqt4topyqt5.py', 'ScannerInterface.py', '-o', 'ScannerInterface']
+
+Processing file: `C:\Users\Caleb\Development\ddPak\Source\Main App\ScannerInterface.py`
+  No changes needed.
+
+**  pyqt4_to_pyqt5.log  Saturday 16. September 2017 10:33  **
+Args: ['../../../pyqt4topyqt5/pyqt4topyqt5.py', 'UserManual.py', '-o', 'UserManual']
+
+Processing file: `C:\Users\Caleb\Development\ddPak\Source\Main App\UserManual.py`
+  No changes needed.
+
+**  pyqt4_to_pyqt5.log  Saturday 16. September 2017 11:13  **
+Args: ['../../../pyqt4topyqt5/pyqt4topyqt5.py', 'UserManual.py', '-o', 'UserManual']
+
+Processing file: `C:\Users\Caleb\Development\ddPak\Source\Main App\UserManual.py`
+  File updated.
+
+**  pyqt4_to_pyqt5.log  Saturday 16. September 2017 11:15  **
+Args: ['../../../pyqt4topyqt5/pyqt4topyqt5.py', 'ScannerInterface.py', '-o', 'ScannerInterface']
+
+Processing file: `C:\Users\Caleb\Development\ddPak\Source\Main App\ScannerInterface.py`
+  File updated.
+

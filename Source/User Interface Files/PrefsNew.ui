@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>653</width>
+    <height>507</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Edit Preferences</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../Main App/myrc.qrc">
+    <normaloff>:/newPrefix/Resources/path2829.png</normaloff>:/newPrefix/Resources/path2829.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+background-color: qlineargradient(spread:pad, x1:1, y1:1, x2:0.057, y2:0.0681818, stop:0 rgba(81, 81, 81, 151), stop:0.98 rgba(0, 0, 0, 255));
+background-image: url(:/newPrefix/Resources/dinpattern-stripe.gif);
+}
+
+
+
+
+ QTabWidget::pane { /* The tab widget frame */
+     border-top: 2px solid #C2C7CB;
+ }
+
+ QTabWidget::tab-bar {
+     left: 5px; /* move to the right by 5px */
+ }
+
+
+
+
+
+
+ QTabBar::tab {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
+                                 stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+     border: 2px solid #C4C4C3;
+     border-bottom-color: #C2C7CB; /* same as the pane color */
+     border-top-left-radius: 4px;
+     border-top-right-radius: 4px;
+     min-width: 8ex;
+     padding: 2px;
+ }
+
+
+
+QTabBar::tab:selected,QTabBar::tab:hover{
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #fafafa, stop: 0.4 #f4f4f4,
+                                 stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);
+}
+ QTabBar::tab:selected {
+     border-color: #9B9B9B;
+     border-bottom-color: #C2C7CB; /* same as pane color */
+ }
+
+ QTabBar::tab:!selected {
+     margin-top: 2px; /* make non-selected tabs look smaller */
+ }
+
+
+
+#tab,#tab_2,#tab_3 {
+	font: 8pt &quot;Arial&quot;;
+background-color:  qlineargradient(spread:pad, x1:1, y1:1, x2:0.057, y2:0.0681818, stop:0 rgba(81, 81, 81, 151), stop:0.98 rgba(0, 0, 0, 255));
+background-image: url(:/newPrefix/Resources/dinpattern-stripe.gif);
+}
+
+QLabel,QRadioButton,QCheckBox {
+
+color:#f26522;font: 75 10pt &quot;Arial&quot;;font-size:16px;
+
+}
+
+
+QCheckBox::indicator {
+width: 30px;
+height: 30px;
+}
+
+QPushButton{
+	
+	
+font: 75 8pt &quot;Arial Black&quot;;
+color: #333;
+border: 2px solid #555;
+border-radius: 11px;
+padding: 5px;
+background: qradialgradient(cx: 0.3, cy: -0.4,
+fx: 0.3, fy: -0.4,
+radius: 1.35, stop: 0 #fff, stop: 1 #888);
+min-width: 80px;
+	
+
+}
+
+QPushButton:hover {
+background: qradialgradient(cx: 0.3, cy: -0.4,
+fx: 0.3, fy: -0.4,
+radius: 1.35, stop: 0 #fff, stop: 1 #bbb);
+}
+
+QPushButton:pressed  {
+
+background: qradialgradient(cx: 0.4, cy: -0.1,
+fx: 0.4, fy: -0.1,
+radius: 1.35, stop: 0 #fff, stop: 1 #ddd);
+}</string>
+  </property>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>450</y>
+     <width>341</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>30</y>
+     <width>581</width>
+     <height>421</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>1</number>
+   </property>
+   <widget class="QWidget" name="tab">
+    <attribute name="title">
+     <string>Serial Settings</string>
+    </attribute>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>270</y>
+       <width>46</width>
+       <height>14</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Parity</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>140</y>
+       <width>81</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Baud Rate</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>180</y>
+       <width>81</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Data Bits</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_2">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>270</y>
+       <width>69</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_3">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>270</y>
+       <width>69</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>230</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Stop Bit</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>40</y>
+       <width>46</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Printer</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>40</y>
+       <width>46</width>
+       <height>14</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Scale</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>90</y>
+       <width>81</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Serial Port</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>140</y>
+       <width>121</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_4">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>140</y>
+       <width>121</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_5">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>180</y>
+       <width>121</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_6">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>180</y>
+       <width>121</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_7">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>220</y>
+       <width>121</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_8">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>220</y>
+       <width>121</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_9">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>90</y>
+       <width>121</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_10">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>90</y>
+       <width>121</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
+     <string>General</string>
+    </attribute>
+    <widget class="QCheckBox" name="checkBox">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>261</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Operate in Cameraless Mode</string>
+     </property>
+    </widget>
+    <widget class="QFrame" name="frame">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>180</y>
+       <width>261</width>
+       <height>161</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>10</y>
+        <width>181</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Production Line Visibility</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_2">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>50</y>
+        <width>161</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>High Volume</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_3">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>80</y>
+        <width>161</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Low Volume</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_4">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>110</y>
+        <width>161</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Super Cell</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QComboBox" name="comboBox_11">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>350</y>
+       <width>131</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_11">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>350</y>
+       <width>101</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Printer Model</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_5">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>70</y>
+       <width>341</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Use Mounts MES for Kits on Carriers View</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>140</y>
+       <width>94</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Select</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>110</y>
+       <width>181</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton">
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>110</y>
+       <width>94</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Select</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_2">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>140</y>
+       <width>181</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_12">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>140</y>
+       <width>201</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>MountMES database file </string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_10">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>110</y>
+       <width>201</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Folder for Database Backup</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../Main App/myrc.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Dialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Dialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

@@ -1,0 +1,26 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>Resources/SQLite_Logo.gif</file>
+    <file>Resources/7176.png</file>
+    <file>Resources/about.png</file>
+    <file>Resources/about.svg</file>
+    <file>Resources/bkgrnd.png</file>
+    <file>Resources/Buttons.png</file>
+    <file>Resources/dd alone.svg</file>
+    <file>Resources/DD logo.png</file>
+    <file>Resources/DD logo.svg</file>
+    <file>Resources/dinpattern-stripe.gif</file>
+    <file>Resources/hjhg.svg</file>
+    <file>Resources/nnnn.png</file>
+    <file>Resources/nnnnnnnn.svg</file>
+    <file>Resources/NoPic.png</file>
+    <file>Resources/path2829.png</file>
+    <file>Resources/patt_4cc99719cf715.jpg</file>
+    <file>Resources/SetTareButton.gif</file>
+    <file>Resources/SetTareButtonDef.gif</file>
+    <file>Resources/test.png</file>
+    <file>Resources/Testo.png</file>
+    <file>Resources/TestoClick.png</file>
+    <file>Resources/Thumbs.db</file>
+  </qresource>
+</RCC>
