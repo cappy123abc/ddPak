@@ -11,8 +11,7 @@ import hashlib
 import fnmatch
 #import QtPoppler
 from serial.tools.list_ports import *
-# FIXME QtXml is no longer supported.
-from PyQt5 import QtCore, QtGui, QtPrintSupport, QtSql, QtWidgets, QtXml
+from PyQt5 import QtCore, QtGui, QtPrintSupport, QtSql, QtWidgets
 from ScannerInterface import Ui_MainWindow
 from login import Ui_loginDialog
 from PrefsNew import Ui_Dialog
@@ -66,7 +65,7 @@ class Login (QtWidgets.QDialog) :
                 query.next()
                 
                 if  query.isValid() :
-                    ddpak.ui.label_19.setText(str(query.value(0).toString()))
+                    ddpak.ui.label_19.setText(query.value(0))
                     ddpak.weighStart()
                     self.accept()
       
@@ -204,7 +203,9 @@ class ChangePrefs (QtWidgets.QDialog):
         config.set('printerport','stopbit', self.ui.comboBox_7.currentText())
         config.set('scaleport','stopbit', self.ui.comboBox_8.currentText())
         config.set('printerport','parity', self.ui.comboBox_2.currentText())
-        config.set('scaleport','parity', self.ui.comboBox_3.currentText())
+        print (serial.PARITY_EVEN)
+        print (self.ui.comboBox_3.currentText())
+        config.set('scaleport','parity', str(self.ui.comboBox_3.currentText()))
         config.set('general','cameramode', self.ui.checkBox.checkState())
         config.set('general','dbbackuppath', self.ui.lineEdit.text())
         config.set('general','mountsmesdb', self.ui.lineEdit_2.text())
@@ -445,7 +446,7 @@ class DDPak(QtWidgets.QMainWindow) :
         self.signalMapper.setMapping (self.ui.pushButton_11, "next")
         self.signalMapper.setMapping (self.ui.pushButton_12, "last")
         
-        self.signalMapper.connect ( QtCore.SIGNAL("mapped(const QString &)"), self.navPdf)
+        self.signalMapper.mapped[QString].connect(self.navPdf)
         
 
         
