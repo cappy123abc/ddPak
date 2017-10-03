@@ -452,16 +452,13 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addLayout(self.verticalLayout_5, 0, 2, 1, 1)
         self.verticalLayout_6 = QtWidgets.QVBoxLayout()
         self.verticalLayout_6.setObjectName("verticalLayout_6")
-        self.label_11 = QtWidgets.QLabel(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
-        self.label_11.setSizePolicy(sizePolicy)
-        self.label_11.setMinimumSize(QtCore.QSize(661, 781))
-        self.label_11.setText("")
-        self.label_11.setObjectName("label_11")
-        self.verticalLayout_6.addWidget(self.label_11)
+        self.axWidget = QAxContainer.QAxWidget(self.scrollAreaWidgetContents)
+        self.axWidget.setProperty("geometry", QtCore.QRect(10, 10, 581, 841))
+        self.axWidget.setObjectName("axWidget")
+        self.verticalLayout_6.addWidget(self.axWidget)
         self.horizontalLayout_13 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
         self.pushButton_9 = QtWidgets.QPushButton(self.centralwidget)
@@ -620,5 +617,6 @@ class Ui_MainWindow(object):
         self.actionExport_Fixed_Data.setText(QtCore.QCoreApplication.translate("MainWindow", "Export Fixed Data", None))
         self.actionManual.setText(QtCore.QCoreApplication.translate("MainWindow", "Manual", None))
 
+from PyQt5 import QAxContainer
 import myrc_rc
 

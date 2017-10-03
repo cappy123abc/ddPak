@@ -9,9 +9,9 @@ import serial
 import shutil
 import hashlib
 import fnmatch
-#import QtPoppler
 from serial.tools.list_ports import *
-from PyQt5 import QtCore, QtGui, QtPrintSupport, QtSql, QtWidgets
+from PyQt5 import QtCore, QtGui, QtPrintSupport, QtSql, QtWidgets 
+from PyQt5.QAxContainer import QAxWidget
 from ScannerInterface import Ui_MainWindow
 from login import Ui_loginDialog
 from PrefsNew import Ui_Dialog
@@ -393,9 +393,12 @@ class DDPak(QtWidgets.QMainWindow) :
         
         QtWidgets.QMainWindow.__init__(self)
 
+        # 
+
         # Set up the user interface from Designer.
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.ui.axWidget.setControl("Adobe PDF Reader")
     
         #Create serial port objects, timer, etc. todo --- add exception handling when opening serial ports.
         
@@ -884,16 +887,16 @@ class DDPak(QtWidgets.QMainWindow) :
             
             specfiles = os.listdir(specdoc_path)
             self.specdoc_file = specdoc_path + fnmatch.filter(specfiles,str(query.value(5).toString()) + '*')[0]
-            #try:
+            try:
             #    self.specdoc = QtPoppler.Poppler.Document.load(self.specdoc_file)
             #    self.specdoc.setRenderHint(QtPoppler.Poppler.Document.Antialiasing)
             #    self.specdoc.setRenderHint(QtPoppler.Poppler.Document.TextAntialiasing) 
-            #    self.navPdf("first")
+                self.navPdf("first")
 
                 
-            #except:
+            except:
 
-            #    self.ui.plainTextEdit.setPlainText("Couldn't find specification document")
+                self.ui.plainTextEdit.setPlainText("Couldn't find specification document")
                 
 
             self.ui.plainTextEdit.setPlainText('Place empty %s box on scale and push Tare button' % box)

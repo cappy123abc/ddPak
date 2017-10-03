@@ -583,16 +583,12 @@ gridline-color:  rgb(170, 85, 255);
          <x>0</x>
          <y>0</y>
          <width>598</width>
-         <height>864</height>
+         <height>863</height>
         </rect>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_6">
-        <item>
-         <widget class="QLabel" name="label_11">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QAxWidget" name="axWidget"/>
         </item>
        </layout>
       </widget>
@@ -1008,7 +1004,7 @@ gridline-color:  rgb(170, 85, 255);
      <x>0</x>
      <y>0</y>
      <width>1433</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1122,8 +1118,15 @@ gridline-color:  rgb(170, 85, 255);
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QAxWidget</class>
+   <extends>QWidget</extends>
+   <header>qaxwidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
-  <include location="myrc.qrc"/>
+  <include location="../Main App/myrc.qrc"/>
  </resources>
  <connections/>
  <slots>
