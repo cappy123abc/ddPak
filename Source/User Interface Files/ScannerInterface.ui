@@ -457,6 +457,20 @@ gridline-color:  rgb(170, 85, 255);
          <widget class="QTableView" name="tableView_2"/>
         </item>
         <item>
+         <widget class="QRadioButton" name="radioButton">
+          <property name="text">
+           <string>MountsMES</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radioButton_2">
+          <property name="text">
+           <string>Manual Entry</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_12">
           <item>
            <widget class="QPushButton" name="pushButton_8">

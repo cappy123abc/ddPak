@@ -393,12 +393,11 @@ class DDPak(QtWidgets.QMainWindow) :
         
         QtWidgets.QMainWindow.__init__(self)
 
-        # 
-
         # Set up the user interface from Designer.
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.ui.axWidget.setControl("Adobe PDF Reader")
+        if not self.ui.pdf_view.setControl("Adobe PDF Reader") :
+            QMessageBox.critical("Error", "Make sure you have Adobe Reader (and its ActiveX) installed!")
     
         #Create serial port objects, timer, etc. todo --- add exception handling when opening serial ports.
         
@@ -440,18 +439,7 @@ class DDPak(QtWidgets.QMainWindow) :
         self.ui.pushButton_7.clicked.connect(self.addKit)
         self.ui.radioButton.clicked.connect(self.setupCarriersView)
         self.ui.radioButton_2.clicked.connect(self.setupCarriersView)
-        self.ui.pushButton_9.clicked.connect(self.signalMapper.map)
-        self.ui.pushButton_10.clicked.connect(self.signalMapper.map)
-        self.ui.pushButton_11.clicked.connect(self.signalMapper.map)
-        self.ui.pushButton_12.clicked.connect(self.signalMapper.map)
-        self.signalMapper.setMapping (self.ui.pushButton_9, "first")
-        self.signalMapper.setMapping (self.ui.pushButton_10, "previous")
-        self.signalMapper.setMapping (self.ui.pushButton_11, "next")
-        self.signalMapper.setMapping (self.ui.pushButton_12, "last")
         
-        self.signalMapper.mapped[QString].connect(self.navPdf)
-        
-
         
         # Set up the MountsMES database connection
         
@@ -857,8 +845,8 @@ class DDPak(QtWidgets.QMainWindow) :
             
             index = self.ui.tableView_2.currentIndex()
             row = index.row()
-            kit = str(self.modelpq.data(self.modelpq.index(row, 0)).toString())
-            carrier = self.modelpq.data(self.modelpq.index(row, 7)).toInt()[0]
+            kit = str(self.modelpq.data(self.modelpq.index(row, 0)))
+            carrier = self.modelpq.data(self.modelpq.index(row, 7))
             specdoc_path = config.get('general','specpath')
             
             query = QtSql.QSqlQuery()
@@ -867,16 +855,16 @@ class DDPak(QtWidgets.QMainWindow) :
             where item_id = '%s'"""  % kit) 
             query.exec_(sqlstring)
             query.next()
-            desc = str(query.value(0).toString())
-            weight = str(query.value(1).toString())
-            self.net_weight = query.value(1).toFloat()
-            weight_tolerance = str(query.value(2).toString())
-            self.weight_tol = query.value(2).toFloat()
-            box = str(query.value(3).toString())
-            labelformat = str(query.value(4).toString())
+            desc = str(query.value(0))
+            weight = str(query.value(1))
+            self.net_weight = query.value(1)
+            weight_tolerance = str(query.value(2))
+            self.weight_tol = query.value(2)
+            box = str(query.value(3))
+            labelformat = str(query.value(4))
             
              
-            self.printerport.write(labelformat)
+            #self.printerport.write(labelformat)
             self.ui.label_12.setText(kit)
             self.ui.label_13.setText(desc)
             self.ui.label_14.setText(weight)
@@ -885,18 +873,13 @@ class DDPak(QtWidgets.QMainWindow) :
 
             # Load up spec document
             
-            specfiles = os.listdir(specdoc_path)
-            self.specdoc_file = specdoc_path + fnmatch.filter(specfiles,str(query.value(5).toString()) + '*')[0]
             try:
-            #    self.specdoc = QtPoppler.Poppler.Document.load(self.specdoc_file)
-            #    self.specdoc.setRenderHint(QtPoppler.Poppler.Document.Antialiasing)
-            #    self.specdoc.setRenderHint(QtPoppler.Poppler.Document.TextAntialiasing) 
-                self.navPdf("first")
+                #specfiles = os.listdir(specdoc_path)
+                #self.specdoc_file = specdoc_path + fnmatch.filter(specfiles,str(query.value(5).toString()) + '*')[0]
+                self.ui.pdf_view.dynamicCall("LoadFile(const QString &)", "C:/Users/caleb/Development/AcRdrTest/42157.02_091512.pdf")		       
 
-                
             except:
-
-                self.ui.plainTextEdit.setPlainText("Couldn't find specification document")
+                self.ui.plainTextEdit.setPlainText("Couldn't find specification document, check if folder exists")
                 
 
             self.ui.plainTextEdit.setPlainText('Place empty %s box on scale and push Tare button' % box)
@@ -907,37 +890,23 @@ class DDPak(QtWidgets.QMainWindow) :
             if config.getboolean('general','carrierviewmode')  :
                 query = QtSql.QSqlQuery(self.MESdb)
                 old_queue = 94
-                old_position = self.modelpq.data(self.modelpq.index(row, 1)).toInt()[0]
+                old_position = self.modelpq.data(self.modelpq.index(row, 1))
             else :  
                 query = QtSql.QSqlQuery()
                 old_queue = 5
-                old_position = self.modelpq.data(self.modelpq.index(row, 2)).toInt()[0]
+                old_position = self.modelpq.data(self.modelpq.index(row, 2))
             query.exec_("""Select max(position) from production_queue 
             where Queue = 99""" ) 
             query.next()
-            position = query.value(0).toInt()[0] + 1
+            #position = query.value(0) + 1
             
-            sqlstring = ("""Update production_queue set  end_date = '%s', Queue = 99, position = %s 
-                            where  Queue = %s and position = %s"""  % (packdate, position, old_queue, old_position )) 
-            query.exec_(sqlstring)
+            #sqlstring = ("""Update production_queue set  end_date = '%s', Queue = 99, position = %s 
+            #                where  Queue = %s and position = %s"""  % (packdate, position, old_queue, old_position )) 
+            #query.exec_(sqlstring)
             self.modelpq.select()
             
         else : self.ui.plainTextEdit.setPlainText('Must take picture of last kit before selecting new kit')
 
-        
-
-    def navPdf (self,nav_direction):
-
-        if str(nav_direction) == 'first' : self.current_page = 0
-        elif str(nav_direction) == 'last' : self.current_page = self.specdoc.numPages() - 1 
-        elif (str(nav_direction) == 'next') and ((self.current_page + 1) <= self.specdoc.numPages()) : self.current_page += 1
-        elif (str(nav_direction) == 'previous') and ((self.current_page - 1) >= 0) : self.current_page -= 1
-            
-        image = self.specdoc.page(self.current_page).renderToImage()
-        self.ui.label_11.setPixmap(QtGui.QPixmap.fromImage(image, QtCore.Qt.MonoOnly))
-
-        return
-            
        
     def addKit(self) :
         

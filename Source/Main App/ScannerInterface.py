@@ -5,7 +5,7 @@
 # Created: Wed Oct 31 13:22:37 2012
 #      by: PyQt4 UI code generator 4.7.3
 #
-# WARNING! All changes made in this file will be lost!
+# WARNING! Don't Regenerate this file! I lost the original.
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -452,56 +452,15 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addLayout(self.verticalLayout_5, 0, 2, 1, 1)
         self.verticalLayout_6 = QtWidgets.QVBoxLayout()
         self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.pdf_view = QAxWidget(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        self.axWidget = QAxContainer.QAxWidget(self.scrollAreaWidgetContents)
-        self.axWidget.setProperty("geometry", QtCore.QRect(10, 10, 581, 841))
-        self.axWidget.setObjectName("axWidget")
-        self.verticalLayout_6.addWidget(self.axWidget)
-        self.horizontalLayout_13 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_13.setObjectName("horizontalLayout_13")
-        self.pushButton_9 = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButton_9.sizePolicy().hasHeightForWidth())
-        self.pushButton_9.setSizePolicy(sizePolicy)
-        self.pushButton_9.setMinimumSize(QtCore.QSize(54, 46))
-        self.pushButton_9.setMaximumSize(QtCore.QSize(54, 46))
-        self.pushButton_9.setObjectName("pushButton_9")
-        self.horizontalLayout_13.addWidget(self.pushButton_9)
-        self.pushButton_10 = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButton_10.sizePolicy().hasHeightForWidth())
-        self.pushButton_10.setSizePolicy(sizePolicy)
-        self.pushButton_10.setMinimumSize(QtCore.QSize(54, 46))
-        self.pushButton_10.setMaximumSize(QtCore.QSize(54, 46))
-        self.pushButton_10.setObjectName("pushButton_10")
-        self.horizontalLayout_13.addWidget(self.pushButton_10)
-        self.pushButton_11 = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButton_11.sizePolicy().hasHeightForWidth())
-        self.pushButton_11.setSizePolicy(sizePolicy)
-        self.pushButton_11.setMinimumSize(QtCore.QSize(54, 46))
-        self.pushButton_11.setMaximumSize(QtCore.QSize(54, 46))
-        self.pushButton_11.setObjectName("pushButton_11")
-        self.horizontalLayout_13.addWidget(self.pushButton_11)
-        self.pushButton_12 = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButton_12.sizePolicy().hasHeightForWidth())
-        self.pushButton_12.setSizePolicy(sizePolicy)
-        self.pushButton_12.setMinimumSize(QtCore.QSize(54, 46))
-        self.pushButton_12.setMaximumSize(QtCore.QSize(54, 46))
-        self.pushButton_12.setObjectName("pushButton_12")
-        self.horizontalLayout_13.addWidget(self.pushButton_12)
-        self.verticalLayout_6.addLayout(self.horizontalLayout_13)
+        sizePolicy.setHeightForWidth(self.pdf_view.sizePolicy().hasHeightForWidth())
+        self.pdf_view.setSizePolicy(sizePolicy)
+        self.pdf_view.setMinimumSize(QtCore.QSize(661, 781))
+        self.pdf_view.setObjectName("pdf_view")
+        self.verticalLayout_6.addWidget(self.pdf_view)
         self.gridLayout_2.addLayout(self.verticalLayout_6, 0, 3, 2, 1)
         spacerItem17 = QtWidgets.QSpacerItem(20, 259, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridLayout_2.addItem(spacerItem17, 1, 2, 1, 1)
@@ -593,10 +552,6 @@ class Ui_MainWindow(object):
         self.pushButton_6.setText(QtCore.QCoreApplication.translate("MainWindow", "Reprint Label (F5)", None))
         self.label.setText(QtCore.QCoreApplication.translate("MainWindow", "Labels Printed", None))
         self.pushButton_5.setText(QtCore.QCoreApplication.translate("MainWindow", "Delete Selected Label", None))
-        self.pushButton_9.setText(QtCore.QCoreApplication.translate("MainWindow", "First", None))
-        self.pushButton_10.setText(QtCore.QCoreApplication.translate("MainWindow", "Prev", None))
-        self.pushButton_11.setText(QtCore.QCoreApplication.translate("MainWindow", "Next", None))
-        self.pushButton_12.setText(QtCore.QCoreApplication.translate("MainWindow", "Last", None))
         self.menuFile.setTitle(QtCore.QCoreApplication.translate("MainWindow", "File", None))
         self.menuEDit.setTitle(QtCore.QCoreApplication.translate("MainWindow", "Edit", None))
         self.menuHelp.setTitle(QtCore.QCoreApplication.translate("MainWindow", "Help", None))
@@ -617,6 +572,7 @@ class Ui_MainWindow(object):
         self.actionExport_Fixed_Data.setText(QtCore.QCoreApplication.translate("MainWindow", "Export Fixed Data", None))
         self.actionManual.setText(QtCore.QCoreApplication.translate("MainWindow", "Manual", None))
 
-from PyQt5 import QAxContainer
 import myrc_rc
-
+from PyQt5.QAxContainer import QAxWidget
+
+
