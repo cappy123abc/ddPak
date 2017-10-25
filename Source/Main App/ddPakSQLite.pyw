@@ -19,7 +19,7 @@ from EditKitTable import Ui_EditKitTableDialog
 from about import Ui_aboutDialog
 from ProductionReporting import Ui_ProductionReportDialog
 from EditUsers import Ui_EditUsersDialog
-#from UserManual import Ui_UMDialog
+from UserManual import Ui_UMDialog
 
 
         
@@ -147,6 +147,7 @@ class ChangePrefs (QtWidgets.QDialog):
         self.ui.buttonBox.rejected.connect(self.close)
         self.ui.pushButton.clicked.connect(self.getDirectory)
         self.ui.pushButton_2.clicked.connect(self.getMountsMESFile)
+        self.ui.pushButton_3.clicked.connect(self.getPSRemoteExe)
         
     def loadConfig (self):
         
@@ -181,9 +182,11 @@ class ChangePrefs (QtWidgets.QDialog):
         self.ui.comboBox_8.setCurrentIndex(self.ui.comboBox_8.findText(config.get('scaleport','stopbit')))
         self.ui.comboBox_2.setCurrentIndex(self.ui.comboBox_2.findText(config.get('printerport','parity')))
         self.ui.comboBox_3.setCurrentIndex(self.ui.comboBox_3.findText(config.get('scaleport','parity')))
-        self.ui.checkBox.setCheckState(config.getint('general','cameramode'))
-        self.ui.lineEdit.setText(config.get('general','dbbackuppath'))
-        self.ui.lineEdit_2.setText(config.get('general','mountsmesdb'))
+        self.ui.checkBox.setCheckState(config.getboolean('general','cameramode',fallback=True))
+        self.ui.lineEdit.setText(config.get('general','dbbackuppath',fallback=''))
+        self.ui.lineEdit_2.setText(config.get('general','mountsmesdb',fallback=''))
+        self.ui.lineEdit_3.setText(config.get('general','psremote_path',fallback=''))
+        self.ui.speedSlider.setSliderPosition(config.getint('general','printer_speed',fallback=2))
 
         if config.getboolean('general', 'highvolume') :  self.ui.checkBox_2.setCheckState(2)
         if config.getboolean('general', 'lowvolume') :  self.ui.checkBox_3.setCheckState(2)
@@ -203,20 +206,20 @@ class ChangePrefs (QtWidgets.QDialog):
         config.set('printerport','stopbit', self.ui.comboBox_7.currentText())
         config.set('scaleport','stopbit', self.ui.comboBox_8.currentText())
         config.set('printerport','parity', self.ui.comboBox_2.currentText())
-        print (serial.PARITY_EVEN)
-        print (self.ui.comboBox_3.currentText())
-        config.set('scaleport','parity', str(self.ui.comboBox_3.currentText()))
-        config.set('general','cameramode', self.ui.checkBox.checkState())
+        config.set('scaleport','parity', self.ui.comboBox_3.currentText())
+        config.set('general','cameramode', str(self.ui.checkBox.isChecked()))
         config.set('general','dbbackuppath', self.ui.lineEdit.text())
         config.set('general','mountsmesdb', self.ui.lineEdit_2.text())
-        if self.ui.checkBox_2.isChecked() :  config.set('general','highvolume', 1)
-        else : config.set('general','highvolume', 0)
-        if self.ui.checkBox_3.isChecked() :  config.set('general','lowvolume', 1)
-        else : config.set('general','lowvolume', 0)
-        if self.ui.checkBox_4.isChecked() :  config.set('general','supercell', 1)
-        else : config.set('general','supercell', 0)
+        config.set('general','psremote_path', self.ui.lineEdit_3.text())
+        config.set('general','printer_speed', str(self.ui.speedSlider.value()))
+        if self.ui.checkBox_2.isChecked() :  config.set('general','highvolume', '1')
+        else : config.set('general','highvolume', '0')
+        if self.ui.checkBox_3.isChecked() :  config.set('general','lowvolume', '1')
+        else : config.set('general','lowvolume', '0')
+        if self.ui.checkBox_4.isChecked() :  config.set('general','supercell', '1')
+        else : config.set('general','supercell', '0')
 
-        config.write(open(config_path, 'wb'))
+        config.write(open(config_path, 'w'))
         ddpak.weighStart()
         
         
@@ -229,6 +232,11 @@ class ChangePrefs (QtWidgets.QDialog):
         
         filename = QtWidgets.QFileDialog.getOpenFileName(self, 'Locate MountsMES','/home', 'Access database files (*.mdb)')[0]
         self.ui.lineEdit_2.setText(str(filename))
+
+    def getPSRemoteExe(self) :
+        
+        filename = QtWidgets.QFileDialog.getOpenFileName(self, 'Locate PSRemote','/home', 'Executable Files (*.exe)')[0]
+        self.ui.lineEdit_3.setText(str(filename))
         
 class ProductionReporting(QtWidgets.QDialog):
 
@@ -333,19 +341,21 @@ class AboutBox (QtWidgets.QDialog) :
         
         self.about_boxui.pushButton_2.clicked.connect(self.close)
         
-#class UserManual (QtWidgets.QDialog) :
-#    
-#    def __init__ (self) :
-#        
-#        QtWidgets.QDialog.__init__(self)
-#        self.ui = Ui_UMDialog()
-#        self.ui.setupUi(self)
-#        
-#        self.ui.pushButton.clicked.connect(self.close)
-#        
-#        self.ui.webView.load(QtCore.QUrl("User Manual/ddPak User Manual.html"))
-#        self.ui.webView.show()
-#        
+class UserManual (QtWidgets.QDialog) :
+    
+    def __init__ (self) :
+        
+        QtWidgets.QDialog.__init__(self)
+        self.ui = Ui_UMDialog()
+        self.ui.setupUi(self)
+        
+        self.ui.pushButton.clicked.connect(self.close)
+        #help_file = os.path.join(application_path, 'C:/Users/caleb//User\ Manual/ddPak\ User\ Manual.html')
+        help_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "User Manual/ddPak User Manual.html"))
+        print (help_file)
+        self.ui.webView.load(QtCore.QUrl.fromLocalFile(help_file))
+        self.ui.webView.show()
+        
         
 class MyDelegate (QtWidgets.QItemDelegate):
 
@@ -418,7 +428,7 @@ class DDPak(QtWidgets.QMainWindow) :
         self.edit_kit_table = EditKitTable()
         self.production_reporting = ProductionReporting()
         self.edit_user = EditUsers()
-        #self.user_manual = UserManual()
+        self.user_manual = UserManual()
        
         # Connect up the Signals and Slots (Events and Event Handlers) for the UI
         self.ui.pushButton_4.clicked.connect(self.takePic)
@@ -428,7 +438,7 @@ class DDPak(QtWidgets.QMainWindow) :
         self.ui.actionExit.triggered.connect(QtWidgets.QApplication.closeAllWindows)
         self.ui.actionKit_Table.triggered.connect(self.editKitTable)
         self.ui.actionEdit_Users.triggered.connect(self.editUsers)
-        #self.ui.actionManual.triggered.connect(self.user_manual.show)
+        self.ui.actionManual.triggered.connect(self.user_manual.show)
         self.ui.actionProduction_Reporting.triggered.connect(self.prodReporting)
         self.ui.actionAbout_DDPak.triggered.connect(self.showAbout)
         self.ui.pushButton.clicked.connect(self.setTare)
@@ -462,7 +472,7 @@ class DDPak(QtWidgets.QMainWindow) :
         """This function starts or restarts the weighing based on preferences"""
         
         config.read(config_path)
-        self.camera_mode = config.getint('general','cameramode')
+        self.camera_mode = config.getboolean('general','cameramode')
         self.production_reportingd_line_viz = ''
         if config.getboolean('general','highvolume')  : self.production_reportingd_line_viz += '3,'
         if config.getboolean('general','lowvolume')  : self.production_reportingd_line_viz += '1,'
@@ -492,6 +502,8 @@ class DDPak(QtWidgets.QMainWindow) :
             self.scaleport.bytesize = config.getint('scaleport','databits')
             self.scaleport.stopbits = config.getfloat('scaleport','stopbit')
             self.scaleport.parity = config.get('scaleport','parity')[:1]
+            # TODO Add a timeout here. If scaleport is available but unreadable
+            # program will freeze.
             if not(self.scaleport.isOpen()) : self.scaleport.open()
             
         except :
@@ -598,6 +610,7 @@ class DDPak(QtWidgets.QMainWindow) :
             if self.label_printed  :
             
                 # Tell PSRemote to take a picture, PSRemote process must be running
+                #TODO Put this in the configuration file.
                 cmd = ["C:\Program Files\BreezeSys\PSRemote\PSRemoteTest\PSRemoteTest.exe","-o","C:\PSRemote","-p","%s" % self.serial_no]
                 
                 # Windows centric startup info, to keep ddPak from losing focus. Suppresses console window for PSRemoteTest
@@ -706,11 +719,12 @@ class DDPak(QtWidgets.QMainWindow) :
             query.next()
             timestamp = datetime.datetime.now()
             self.serial_no = (timestamp.strftime("%y%m%d%H%M%S")) + kit
-            desc = str(query.value(0).toString())
-            desc2 = str(query.value(1).toString())
-            brand = str(query.value(4).toString())
+            desc = str(query.value(0))
+            desc2 = str(query.value(1))
+            brand = str(query.value(4))
             packdate = timestamp.strftime("%Y-%m-%d %H:%M:%S")
             packer = str(ddpak.ui.label_19.text())
+            print_speed = config.getint('printer_speed')
                     
             if  self.checkScale()  or override :
                 
@@ -718,15 +732,15 @@ class DDPak(QtWidgets.QMainWindow) :
                 string_info = ('P:'+packer+' G:'+ str(self.gross_weight)+' N:'+str(self.indicated_weight))
                 self.label_second = """~PS^XA
                 ^LH0,0
-                ^PR4,4
+                ^PR%s,%s,%s
                 ^FT349,2946^A0B,277,196^FD%s^FS
                 ^BY600,600^FT75,1061^BXN,25,200,0,0,1
                 ^FD%s^FS
                 ^FT949,3000^A0B,277,196^FD%s^FS
-                ^PQ1,0,1,Y^XZ""" % (self.serial_no,string2d, string_info)
+                ^PQ1,0,1,Y^XZ""" % (print_speed, print_speed, print_speed, self.serial_no,string2d, string_info)
                 
                 self.printerport.write(self.label_second)
-                
+                # TODO move the zebra PR (print rate) from the label string to here
                 self.label_first = """^XA^XF%s^FS
                 ^FN1^FD%s^FS
                 ^FN2^FD%s^FS
@@ -861,10 +875,10 @@ class DDPak(QtWidgets.QMainWindow) :
             weight_tolerance = str(query.value(2))
             self.weight_tol = query.value(2)
             box = str(query.value(3))
-            labelformat = str(query.value(4))
+            labelformat = bytes(query.value(4).encode('ascii'))
             
              
-            #self.printerport.write(labelformat)
+            self.printerport.write(labelformat)
             self.ui.label_12.setText(kit)
             self.ui.label_13.setText(desc)
             self.ui.label_14.setText(weight)
@@ -873,9 +887,10 @@ class DDPak(QtWidgets.QMainWindow) :
 
             # Load up spec document
             
-            try:
+            try: 
                 #specfiles = os.listdir(specdoc_path)
                 #self.specdoc_file = specdoc_path + fnmatch.filter(specfiles,str(query.value(5).toString()) + '*')[0]
+                #self.ui.pdf_view.dynamicCall("LoadFile(const QString &)", self.specdoc_file)
                 self.ui.pdf_view.dynamicCall("LoadFile(const QString &)", "C:/Users/caleb/Development/AcRdrTest/42157.02_091512.pdf")		       
 
             except:
@@ -887,7 +902,7 @@ class DDPak(QtWidgets.QMainWindow) :
                 
             #Move selected kit to completed queue in either MountsMES or the internal SQLite database depending on preferences
             
-            if config.getboolean('general','carrierviewmode')  :
+            if self.ui.radioButton.isChecked() :
                 query = QtSql.QSqlQuery(self.MESdb)
                 old_queue = 94
                 old_position = self.modelpq.data(self.modelpq.index(row, 1))
@@ -898,11 +913,11 @@ class DDPak(QtWidgets.QMainWindow) :
             query.exec_("""Select max(position) from production_queue 
             where Queue = 99""" ) 
             query.next()
-            #position = query.value(0) + 1
+            position = query.value(0) + 1
             
-            #sqlstring = ("""Update production_queue set  end_date = '%s', Queue = 99, position = %s 
-            #                where  Queue = %s and position = %s"""  % (packdate, position, old_queue, old_position )) 
-            #query.exec_(sqlstring)
+            sqlstring = ("""Update production_queue set  end_date = '%s', Queue = 99, position = %s 
+                            where  Queue = %s and position = %s"""  % (packdate, position, old_queue, old_position )) 
+            query.exec_(sqlstring)
             self.modelpq.select()
             
         else : self.ui.plainTextEdit.setPlainText('Must take picture of last kit before selecting new kit')

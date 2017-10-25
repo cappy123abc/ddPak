@@ -1,6 +1,6 @@
 from cx_Freeze import setup, Executable
 
-includes=["PyQt4.QtWebKit","PyQt4.QtNetwork"]
+includes=[]
 includefiles = ["mounts.sqlite","ddPak.ini","imageformats","User Manual"]
 
 exe = Executable(
