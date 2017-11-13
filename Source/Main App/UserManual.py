@@ -16,7 +16,7 @@ class Ui_UMDialog(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/newPrefix/Resources/path2829.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         UMDialog.setWindowIcon(icon)
-        self.webView = QtWebKitWidgets.QWebView(UMDialog)
+        self.webView = QtWebEngineWidgets.QWebEngineView(UMDialog)
         self.webView.setGeometry(QtCore.QRect(29, 20, 791, 581))
         self.webView.setUrl(QtCore.QUrl("about:blank"))
         self.webView.setObjectName("webView")
