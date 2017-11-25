@@ -258,9 +258,6 @@ class ProductionReporting(QtWidgets.QDialog):
         production_date = self.ui.calendarWidget.selectedDate().toPyDate().isoformat()
         
         self.ui.textEdit.clear()
-
-
-        import pdb; pdb.set_trace()
         self.loadPictureData(production_date,ddpak.host_name)
         self.ui.textEdit.insertPlainText('Kits packed on Workstation: ' + ddpak.host_name + ' on Date: ' + production_date + '\n\n' ) 
         query2 = QtSql.QSqlQuery()
@@ -305,7 +302,7 @@ class ProductionReporting(QtWidgets.QDialog):
     def loadPictureData(self,date ='',hostname = '') :
         """ Retrieve photo names from PSRemote directory"""
         try :
-            picpath = "//%s/PSRemote/%s" % (hostname,date)
+            picpath = "C:/PSRemote/%s" % date
             pic_ids = os.listdir(picpath)
             query = QtSql.QSqlQuery()
             query.exec_("delete  from photo_temp")
@@ -351,8 +348,7 @@ class UserManual (QtWidgets.QDialog) :
         
         self.ui.pushButton.clicked.connect(self.close)
         #help_file = os.path.join(application_path, 'C:/Users/caleb//User\ Manual/ddPak\ User\ Manual.html')
-        help_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "User Manual/ddPak User Manual.html"))
-        print (help_file)
+        help_file = os.path.abspath(os.path.join(application_path, "User Manual/ddPak User Manual.html"))
         self.ui.webView.load(QtCore.QUrl.fromLocalFile(help_file))
         self.ui.webView.show()
         
@@ -502,7 +498,6 @@ class DDPak(QtWidgets.QMainWindow) :
             self.scaleport.bytesize = config.getint('scaleport','databits')
             self.scaleport.stopbits = config.getfloat('scaleport','stopbit')
             self.scaleport.parity = config.get('scaleport','parity')[:1]
-            #self.scaleport.parity = serial.PARITY_EVEN
             if not(self.scaleport.isOpen()) : self.scaleport.open()
             
         except :
@@ -630,7 +625,6 @@ class DDPak(QtWidgets.QMainWindow) :
                     directory = os.path.split(os.path.abspath((output[25:len(output)-2])))[0]
         
                     number_of_files = len([item for item in os.listdir(directory) if os.path.isfile(os.path.join(directory,item))])
-                    #import pdb; pdb.set_trace()
                     original_file_name = output[25:len(output)-2]
                     new_file_name = output[25:len(output)-10] + '_' + str(number_of_files) + '.jpg'
                     os.rename(original_file_name,new_file_name)
@@ -657,7 +651,6 @@ class DDPak(QtWidgets.QMainWindow) :
         start_char = b'\x00'
         while start_char != b'\x02' :
             start_char = self.scaleport.read(1)
-        #import pdb; pdb.set_trace()
         line = start_char +  self.scaleport.read(16)
         
         #start parsing the Mettler Toledo continuous output
@@ -675,14 +668,11 @@ class DDPak(QtWidgets.QMainWindow) :
         
         if (0b10 & statuswordb) > 0 : sign = '-'
         else : sign = '+'
-        #import pdb; pdb.set_trace()
         weightstring = sign +  line[3:(10- decimalposition)].decode('ascii').lstrip().lstrip('0') + '.' + line[(10- decimalposition):10].decode('ascii')
         tarestring = line[10:(16- decimalposition)].decode('ascii').lstrip().lstrip('0') + '.' + line[(16- decimalposition):16].decode('ascii')
-        print (tarestring, weightstring)
         self.ui.label_10.setText(weightstring)
         self.ui.label_20.setText(tarestring)
-        #weightstring = '+81.6'
-        #tarestring = '+7.6'
+        
         # Weight verification for high-low indicator
         
         try:
@@ -691,7 +681,6 @@ class DDPak(QtWidgets.QMainWindow) :
             tare = float(tarestring)
             
         except :
-            print ('Scale brain fart')
             return False
             
         

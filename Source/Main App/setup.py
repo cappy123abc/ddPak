@@ -13,6 +13,6 @@ setup(
     name = "ddPak",
     version = "0.1",
     description = "Packing Software for Mounts",
-    options = {"build_exe": {"includes":includes,"include_files":includefiles,"icon":"plane box.ico"}},
+    options = {"build_exe": {"includes":includes,"include_files":includefiles}},
     executables = [exe]
     )
